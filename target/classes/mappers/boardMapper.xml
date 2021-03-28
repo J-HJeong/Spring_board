@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="org.jhj.myweb.mapper.BoardMapper">
+ 
+ 	<!-- 게시글 목록 확인 -->
+ 	<select id="boardList" resultType="BoardVO" parameterType="PageVO">
+ 		SELECT boardnum, boardtitle, boardwriter, boarddate, view_cnt FROM tk_board order by boardnum desc limit #{pageStart}, #{perPageNum}
+ 	</select>
+ 	
+ 	<!-- 게시글 개수 -->
+ 	<select id="countBoard" resultType="int">
+ 		select count(*) from tk_board
+ 	</select>
+ 	
+ 	<!-- 게시글 확인 -->
+ 	<select id="read" parameterType="int" resultType="BoardVO">
+ 		select boardnum, boardtitle, boardcontent, boardwriter, boarddate from tk_board where boardnum = #{boardnum}
+ 	</select>
+ 	
+ 	<!-- 게시글 작성 -->
+ 	<insert id="write">
+ 		INSERT INTO tk_board(boardtitle, boardcontent, boardwriter, boarddate)
+     		VALUES (#{boardTitle}, #{boardContent}, #{boardWriter}, now())
+ 	</insert>
+ 	
+ 	<!-- 게시글 수정 -->
+ 	<update id="update" parameterType="BoardVO">
+ 		 update tk_board set boardtitle = #{boardTitle}, boardcontent = #{boardContent}, boarddate = now() where boardnum = #{boardNum}
+ 	</update>
+ 	
+ 	<!-- 게시글 삭제 -->
+ 	<delete id="delete">
+ 		delete from tk_board where boardnum = #{boardnum}
+ 	</delete>
+ 	
+ 	<!-- 게시판 조회수 -->
+ 	<update id="viewCount" parameterType="int">
+ 		update tk_board set view_cnt = view_cnt + 1 where boardnum = #{boardNum}
+ 	</update>
+ </mapper>
